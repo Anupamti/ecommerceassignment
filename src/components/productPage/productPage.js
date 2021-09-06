@@ -1,11 +1,28 @@
-import { Button, Container } from '@material-ui/core'
+import { Box, Button, Container, Divider, IconButton, ListItem, SwipeableDrawer, Typography } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ADDToCart, GetCart } from '../../Redux/action/cart';
 import { ButtonContainer, Image, OfferData, Price, ProductContainer, ProductData, ProductDetails, ProductImage, ProductPrice, ProductTitle, Variation, VariationContainer, VariationImage, VariationName } from './productStyles'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import CartCard from '../cart/cartCard';
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    title: {
+        flexGrow: 1,
+    },
+    drawer: {
+        width: '30%'
+    }
+}));
 function ProductPage() {
-
+    const classes = useStyles();
     const [selectedProduct, setSelectedProduct] = useState();
     const [URL] = useState('https://ecommerceanupamsassignment.herokuapp.com/');
     const { userData } = useSelector(state => state.userDetails.data)
@@ -13,6 +30,22 @@ function ProductPage() {
 
     const dispatch = useDispatch()
 
+    const [datas, SetData] = useState()
+    const state = useSelector(state => state.cartData.cart)
+    const [toggle, setToggle] = useState()
+
+    const [clicked, setClicked] = useState(false)
+
+
+    useEffect(() => {
+        dispatch(GetCart())
+        setData()
+    }, [clicked])
+
+
+    const setData = () => {
+        SetData(state?.userData)
+    }
 
     useEffect(() => {
         console.log(id)
@@ -28,8 +61,14 @@ function ProductPage() {
 
     const handleAddToCart = () => {
         dispatch(ADDToCart(selectedProduct))
-        window.location.reload()
-        dispatch(GetCart())
+        setClicked(!clicked)
+        setToggle(true)
+
+    }
+
+
+    const toggleDrawer = () => {
+        setToggle(false)
     }
 
     return (
@@ -82,7 +121,41 @@ function ProductPage() {
                             </ProductData>
                         </ProductContainer>
                     </Container>
-
+                    <SwipeableDrawer
+                        anchor="right"
+                        open={toggle}
+                        onClose={false}
+                        onOpen={true}
+                    >
+                        <Box style={{ display: "flex", alignItems: 'center', padding: '10px' }}>
+                            <IconButton
+                                onClick={toggleDrawer}
+                            >
+                                <ArrowBackIosIcon />
+                            </IconButton>
+                            <Typography variant="h6" className={classes.title}>
+                                CART
+                            </Typography>
+                            <Divider light />
+                        </Box>
+                        <div style={{ height: '85%', overflowY: 'scroll' }}>
+                            {
+                                datas && (
+                                    <>
+                                        {
+                                            datas.map((data) => (
+                                                <ListItem button>
+                                                    <CartCard props={data} />
+                                                    <Divider light />
+                                                </ListItem>
+                                            ))
+                                        }
+                                    </>
+                                )
+                            }
+                        </div>
+                        <Button style={{ backgroundColor: 'black', color: 'white', padding: '10px' }}>Proceed to Buy</Button>
+                    </SwipeableDrawer>
                 </>) : (<> </>)
             }
         </div>
