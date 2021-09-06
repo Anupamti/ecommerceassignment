@@ -1,0 +1,12 @@
+export const AUTH = 'AUTH';
+export const LOGOUT = 'LOGOUT';
+export const CREATE = 'CREATE';
+export const FETCH_ALL = 'FETCH_ALL';
+export const FETCH_DATA = 'FETCH_DATA';
+export const DELETE = 'DELETE';
+export const START_LOADING = 'START_LOADING';
+export const ERROR = 'ERROR';
+export const SELECT = 'SELECT';
+export const ADDTOCART = 'ADDTOCART';
+export const REMOVEFROMCART = 'REMOVEFROMCART';
+export const GETCART = 'GETCART';

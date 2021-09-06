@@ -1,57 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
-
+import React, { useEffect, useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
+import Home from './components/home/home';
+import Login from './components/login/login';
+import Navbar from './components/navbar/navbar';
+import ProductPage from './components/productPage/productPage';
+import SellProducts from './components/sellProducts/sellProducts';
+import Signup from './components/signup/signup';
 function App() {
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    console.log("this is the token", user?.token)
+  }, [user?.token])
+
+
+  useEffect(() => {
+
+    setUser(JSON.parse(localStorage.getItem('profile')))
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <>
+      <Router>
+        <Switch>
+          {
+            user ? (
+              <>
+                <Navbar />
+                <Redirect to={{ pathname: '/home' }} />
+                <Route path="/home" exact component={Home} />
+                <Route path='/sellproducts' exact component={SellProducts} />
+                <Route path="/productpage" exact component={ProductPage} />
+              </>
+            ) : (<>
+              <Redirect to={{ pathname: '/login' }} />
+              <Route path="/login" exact component={Login} />
+              <Route path="/signup" exact component={Signup} />
+            </>)
+          }
+        </Switch>
+      </Router>
+    </>
   );
 }
 
