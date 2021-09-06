@@ -30,17 +30,17 @@ function App() {
         <Switch>
           {
             user ? (
-              <>
-                <Navbar />
-                <Redirect to={{ pathname: '/home' }} />
-                <Route path="/home" exact component={Home} />
-                <Route path='/sellproducts' exact component={SellProducts} />
-                <Route path="/productpage" exact component={ProductPage} />
+              <><Redirect to={{ pathname: '/home' }} />
+                <Route path="/login" exact component={Login} />
+                <Route path="/home">   <Navbar /><Home /></Route>
+                <Route path="/sellproducts" >   <Navbar /><SellProducts /> </Route>
+                <Route path="/productpage" ><Navbar /><ProductPage /> </Route>
               </>
             ) : (<>
               <Redirect to={{ pathname: '/login' }} />
               <Route path="/login" exact component={Login} />
               <Route path="/signup" exact component={Signup} />
+              <Route path="/home">   <Navbar /><Home /></Route>
             </>)
           }
         </Switch>
